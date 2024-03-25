@@ -31,7 +31,7 @@ fn multiply(a: isize, b: isize) -> PyResult<isize> {
     Ok(a * b)
 }
 
-// #[pyfunction]
+#[pyfunction]
 // fn multi_http_requests(urls: Vec<String>) -> PyResult<PyList> {
 fn multi_http_requests(py: Python, urls: Vec<String>, ranges: Vec<(isize,isize)>) -> PyObject {
                                                                       //Vec<Result<String, reqwest::Error>> {
@@ -113,6 +113,10 @@ mod tests {
     // Import the `add` function from the parent module
     use super::*;
 
+    #[test]
+    fn test_lucy() {
+        println!("LUCY!");
+    }
 
     #[test]
     fn test_add() {
@@ -125,10 +129,10 @@ mod tests {
             (0,0),
             (0,0)
         ];
-        let gil = Python::acquire_gil();
-        let py = gil.python();
-        let results = multi_http_requests(py, urls, ranges);
-        println!("results:{:?}", results);
+        // let gil = Python::acquire_gil();
+        // let py = gil.python();
+        // let results = multi_http_requests(py, urls, ranges);
+        // println!("results:{:?}", results);
     }
 }
 
@@ -150,9 +154,10 @@ pub fn perform_computation() {
 }
 
 #[pymodule]
-fn rust(_py: Python, m: &PyModule) -> PyResult<()> {
+fn alluxiocommon(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(multiply, m)?)?;
     m.add_function(wrap_pyfunction!(perform_computation, m)?)?;
+    m.add_function(wrap_pyfunction!(multi_http_requests, m)?)?;
     Ok(())
 }
 
